@@ -4,6 +4,10 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+  font-family: "Inter", sans-serif;
+}
+
 .collapse-title {
   z-index: 10;
   pointer-events: none;

@@ -149,7 +149,7 @@ function IndexPopup() {
   return (
     <div className="p-4 w-96 flex flex-col" data-theme="night">
       <Toaster position="top-right" />
-      <div className="flex gap-2 items-center">
+      <div className="flex gap-2 items-center sticky top-0 py-4 bg-inherit">
         {isAddMode ? (
           <FiArrowLeft
             className="cursor-pointer"
@@ -161,7 +161,7 @@ function IndexPopup() {
             }}
           />
         ) : null}
-        <h1 className="text-xl font-semibold">AutoForm Fill</h1>
+        <h1 className="text-xl font-semibold">AutoFill Form 🚀 </h1>
 
         {scrapedData?.length && !isAddMode ? (
           <button
@@ -182,7 +182,7 @@ function IndexPopup() {
             </p>
           </div>
           {savedForms[location.host]?.length ? (
-            <ul className="w-full">
+            <ul className="w-full max-h-64">
               {(savedForms[location.host] || []).map((value) => (
                 <li key={value.name} className="py-2 ">
                   <div className="collapse collapse-arrow">
@@ -256,7 +256,8 @@ function IndexPopup() {
               checked={fieldsToSave.length === scrapedData.length}
             />
           </label>
-          <ul className="max-h-64 overflow-y-auto">
+          <p className="my-2" />
+          <ul className="max-h-96 overflow-y-auto">
             {scrapedData.map((field) => {
               const identifier = field.id
               return (
@@ -275,10 +276,10 @@ function IndexPopup() {
             })}
           </ul>
           <button
-            className="btn btn-primary w-full"
+            className="btn btn-primary btn-md w-full"
             onClick={handleSave}
             title="Save form">
-            <FiSave size={18} />
+            Save <FiSave size={18} />
           </button>
         </div>
       ) : null}
