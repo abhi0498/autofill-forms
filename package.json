@@ -7,7 +7,8 @@
   "scripts": {
     "dev": "plasmo dev",
     "build": "plasmo build",
-    "package": "plasmo package"
+    "package": "plasmo package",
+    "pre-commit-check": "git diff --cached --quiet --exit-code -- package.json || { echo 'Checking package.json version...'; CURRENT_VERSION=$(jq -r '.version' package.json); STAGED_VERSION=$(jq -r '.version' $GIT_DIR/cache/index | head -n1); if [ \"$CURRENT_VERSION\" != \"$STAGED_VERSION\" ]; then echo 'Error: package.json version must be bumped before committing.'; exit 1; fi }"
   },
   "dependencies": {
     "@plasmohq/storage": "^1.10.0",
@@ -26,6 +27,7 @@
     "@types/react": "18.2.48",
     "@types/react-dom": "18.2.18",
     "daisyui": "^4.11.1",
+    "husky": "^9.0.11",
     "postcss": "8.4.33",
     "prettier": "3.2.4",
     "typescript": "5.3.3"
@@ -39,5 +41,10 @@
       "activeTab",
       "scripting"
     ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run pre-commit-check"
+    }
   }
 }

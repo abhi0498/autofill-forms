@@ -23,15 +23,11 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       }
     }
     data = data.map((el) => {
-      if (
-        el.type === "hidden" ||
-        el.type === "submit" ||
-        (!el.id && !el.name)
-      ) {
+      if (el.type === "submit" || (!el.id && !el.name)) {
         return
       }
       const labelElement =
-        el.id && el.parentElement.querySelector("label[for=" + el.id + "]")
+        el.id && el.parentElement.querySelector("label[for='" + el.id + "']")
       return {
         id: el.id || el.name,
         label: labelElement?.textContent || el.placeholder || el.name || el.id,

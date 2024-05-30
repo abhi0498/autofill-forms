@@ -17,3 +17,11 @@
     pointer-events: all;
   }
 }
+
+.resizable {
+  resize: both;
+  overflow: auto;
+  border: 1px solid #ccc;
+  padding: 10px;
+  box-sizing: border-box;
+}

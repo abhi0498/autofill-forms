@@ -1,13 +1,12 @@
+import { useTheme } from "@"
 import { useEffect, useState } from "react"
 import toast, { Toaster } from "react-hot-toast"
 import {
-  FiArrowDown,
   FiArrowLeft,
-  FiChevronDown,
   FiPlay,
   FiPlus,
   FiSave,
-  FiSkipBack,
+  FiSettings,
   FiTrash
 } from "react-icons/fi"
 
@@ -17,12 +16,24 @@ import type { Field } from "~content"
 
 import "~style.css"
 
+import type { Option } from "~options"
+
+export type SavedForm = {
+  [key: string]: {
+    name: string
+    url: string
+    data: Field[]
+    id: Number
+  }[]
+}
 function IndexPopup() {
   const [isAddMode, setIsAddMode] = useState<boolean>(false)
-  const [savedForms, setSavedForms] = useStorage<{
-    [key: string]: { name: string; url: string; data: Field[]; id: Number }[]
-  }>("saved-forms", {})
-  console.log({ savedForms })
+
+  const [savedForms, setSavedForms] = useStorage<SavedForm>("saved-forms", {})
+  const [options, setOptions] = useStorage<Option>("options", {
+    theme: "night"
+  })
+
   const [name, setName] = useState<string>("")
 
   const [fieldsToSave, setFieldsToSave] = useState<string[]>([])
@@ -147,7 +158,7 @@ function IndexPopup() {
   }
 
   return (
-    <div className="p-4 w-96 flex flex-col" data-theme="night">
+    <div className="p-4 w-[40rem] flex flex-col" data-theme={options.theme}>
       <Toaster position="top-right" />
       <div className="flex gap-2 items-center sticky top-0 py-4 bg-inherit">
         {isAddMode ? (
@@ -163,15 +174,30 @@ function IndexPopup() {
         ) : null}
         <h1 className="text-xl font-semibold">AutoFill Form 🚀 </h1>
 
-        {scrapedData?.length && !isAddMode ? (
-          <button
-            className="btn btn-sm btn-primary ml-auto "
-            title="Add form"
-            onClick={() => {
-              setIsAddMode(true)
-            }}>
-            <FiPlus />
-          </button>
+        {!isAddMode ? (
+          <>
+            <button
+              className="btn btn-sm btn-primary ml-auto "
+              title="Add form"
+              onClick={() => {
+                if (scrapedData.length === 0) {
+                  toast.error(
+                    "No form fields found on this page which can be saved"
+                  )
+                  return
+                }
+                setIsAddMode(true)
+              }}>
+              <FiPlus />
+            </button>
+            <button
+              className="btn btn-sm btn-primary ml-2"
+              onClick={() => {
+                chrome.tabs.create({ url: "options.html" })
+              }}>
+              <FiSettings />
+            </button>
+          </>
         ) : null}
       </div>
       {!isAddMode ? (
